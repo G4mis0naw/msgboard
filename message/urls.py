@@ -1,9 +1,8 @@
 from django.urls import path
 
-from . import views, forms
+from . import views
 
 urlpatterns = [
-    path('', views.index, name="index"),
-    #path('', views.login, name="login"),
-    path('', forms.msgForm, name="msgForm"),
+    path('', views.message_board),
+    path('submit', views.message_submit),
 ]
