@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>why u want 2 bully me?</title>
+</head>
+<body>
+    <h1>why u want 2 bully me?</h1>
+    <h2>signup / login first.</h2>
+    <div class="signupform">
+       <form method="post" action="register">
+            {% csrf_token %}
+            {{ form }}
+            <p>username</p>
+            <input type="text" name="username" autofocus required>
+            <br>
+            <br>
+            <p>password</p>
+            <input type="password" name="passwd" required>
+            <br>
+            <br>
+            <div class="loginbtn">
+                <button> 登录 / 注册 </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
