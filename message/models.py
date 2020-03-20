@@ -8,3 +8,9 @@ class messageBoard(models.Model):
 
     class Meta:
         ordering = ['-timestamp']
+
+
+class usernameInfo(models.Model):
+    username = models.CharField(max_length=20, unique=True)
+    passwd = models.CharField(max_length=20)
+    ticket = models.CharField(max_length=100, default='WTF')

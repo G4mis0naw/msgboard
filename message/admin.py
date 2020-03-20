@@ -3,3 +3,4 @@ from message import models
 
 
 admin.site.register(models.messageBoard)
+admin.site.register(models.usernameInfo)

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="stylesheet" type="text/css" href="../../static/navigation.css">
+    <title>why u want 2 bully me?</title>
+</head>
+<body>
+    <nav id="menu">
+        <div class="menu-content">
+            <ul class="ac-gn-list">
+                <li class="ac-index">
+                    <a href="{% url 'message:index' %}" class="ac-gn-test">
+                        <span class="ac-gn-text">index</span>
+                    </a>
+                </li>
+                <li class="ac-login">
+                    <a href="{% url 'message:login' %}" class="ac-gn-test">
+                        <span class="ac-gn-text">login</span>
+                    </a>
+                </li>
+                <li class="ac-signup">
+                    <a href="{% url 'message:signup' %}" class="ac-gn-test">
+                        <span class="ac-gn-text">signup</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <h1>why u want 2 bully me?</h1>
+    <h2>signup first.</h2>
+    <div class="signupform">
+       <form method="post" action="{% url 'message:register' %}">
+            {% csrf_token %}
+            {{ form }}
+            <p>username</p>
+            <input type="text" name="username" autofocus required>
+            <br>
+            <br>
+            <p>password</p>
+            <input type="password" name="passwd" required>
+            <br>
+            <br>
+            <div class="btn">
+                <button> 注册 </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
