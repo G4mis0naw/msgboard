@@ -9,14 +9,17 @@
     display: block;
     margin: 0;
     width: 100%;
-    min-width: 1024px;
+    min-width: 600px;
     height: 48px;
     max-height: 44px;
-    font-size: 17px;
+    font-size: 16px;
+    font-family: "Helvetica";
 }
 
 #menu .menu-content{
     float: left;
+    text-align: center;
+    width: 100%;
 }
 
 #menu .ac-gn-list {
@@ -28,12 +31,9 @@
     display: -webkit-box;
     display: flex;
     -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    -webkit-user-select: none;
-    -moz-user-select: none;
+    justify-content: center;
     -ms-user-select: none;
-    user-select: none;
+    text-align: center;
 }
 
 #menu .ac-gn-list .ac-*{
@@ -42,6 +42,7 @@
     display: inline-block;
     position: relative;
     height: 44px;
+    width: 50px;
     z-index: 1;
     vertical-align: top;
 }
@@ -49,8 +50,10 @@
 li{
     display: inline-block;
     text-align: center;
-    margin-top:10px;
+    margin-top: 11px;
+    opacity: 0.8;
+    width: 200px;
 }
 
 
-a:link, a:visited {color: rgb(245, 245, 247); font-family: "Helvetica";text-decoration: none; font-size: 1.2em;}
+a:link, a:visited {color: rgb(245, 245, 247); text-decoration: none; font-size: 1.2em;}

@@ -3,57 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="stylesheet" type="text/css" href="../../static/navigation.css">
-    <title>y u bully me?</title>
+    <link rel="stylesheet" type="text/css" href="../../static/message/css/navigation.css">
+    <link rel="stylesheet" type="text/css" href="../../static/message/css/index.css">
+    <title>Home</title>
 </head>
 <body>
+
     <nav id="menu">
         <div class="menu-content">
             <ul class="ac-gn-list">
                 <li class="ac-index">
-                    <a href="{% url 'message:index' %}" class="ac-gn-test">
-                        <span class="ac-gn-text">index</span>
+                    <a href="{% url 'message:home' %}" class="ac-gn-test">
+                        <span class="ac-gn-text">Home</span>
                     </a>
                 </li>
                 <li class="ac-login">
                     <a href="{% url 'message:login' %}" class="ac-gn-test">
-                        <span class="ac-gn-text">login</span>
+                        <span class="ac-gn-text">Login</span>
                     </a>
                 </li>
                 <li class="ac-signup">
-                    <a href="{% url 'message:signup' %}" class="ac-gn-test">
-                        <span class="ac-gn-text">signup</span>
+                    <a href="{% url 'message:register' %}" class="ac-gn-test">
+                        <span class="ac-gn-text">Register</span>
+                    </a>
+                </li>
+                <li class="ac-farewell">
+                    <a href="{% url 'message:logout' %}" class="ac-gn-test">
+                        <span class="ac-gn-text">Logout</span>
                     </a>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <h1>留言板</h1>
-    <div class="msgform">
-        <form method="post" action='{% url 'message:submit' %}'>
-            {% csrf_token %}
-            {{ form }}
-            <p4>username</p4>
-            <input type="text" name="username">
-            <br>
-            <br>
-            <p4>content</p4>
-            <textarea name="content" rows="5" cols="30"></textarea>
-            <br>
-            <br>
-            <div class="btn">
-                <button> 提交 </button>
-            </div>
-        </form>
+    <div class="form-container">
+        <br />
+        <h1>leave somthing?</h1>
+        <div class="msgform">
+            <form method="post" action='{% url 'message:post' %}'>
+                {% csrf_token %}
+                <h3>username</h3>
+                <p>{{ currentUser }}</p>
+                <h3>content</h3>
+                <textarea name="content" rows="5" cols="60"></textarea>
+                <br />
+                <br />
+                <div class="btn">
+                    <button> submit </button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <div class="msgshow">
-        {% for message in message_list %}
-            <p>-----------------------------------------</p>
-            <p>{{ message.username }} 在{{ message.timestamp }}发表了</p>
-            <p>{{ message.content }}</p>
-        {% endfor %}
+    <div class="message-container">
+        <div class="msgshow">
+            {% for message in message_list %}
+                <p>--------------------------------------------------------------</p>
+                <p>{{ message.uUsername }} left a message on {{ message.timestamp }}</p>
+                <p>{{ message.content }}</p>
+            {% endfor %}
+        </div>
     </div>
 </body>
 </html>

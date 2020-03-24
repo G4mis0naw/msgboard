@@ -3,50 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="stylesheet" type="text/css" href="../../static/navigation.css">
+    <link rel="stylesheet" type="text/css" href="../../static/message/css/navigation.css">
+    <link rel="stylesheet" type="text/css" href="../../static/message/css/LoginSignup.css">
     <title>want 2 bully me again?</title>
 </head>
 <body>
+
     <nav id="menu">
         <div class="menu-content">
             <ul class="ac-gn-list">
                 <li class="ac-index">
-                    <a href="{% url 'message:index' %}" class="ac-gn-test">
-                        <span class="ac-gn-text">index</span>
+                    <a href="{% url 'message:home' %}" class="ac-gn-test">
+                        <span class="ac-gn-text">Home</span>
                     </a>
                 </li>
                 <li class="ac-login">
                     <a href="{% url 'message:login' %}" class="ac-gn-test">
-                        <span class="ac-gn-text">login</span>
+                        <span class="ac-gn-text">Login</span>
                     </a>
                 </li>
                 <li class="ac-signup">
-                    <a href="{% url 'message:signup' %}" class="ac-gn-test">
-                        <span class="ac-gn-text">signup</span>
+                    <a href="{% url 'message:register' %}" class="ac-gn-test">
+                        <span class="ac-gn-text">Register</span>
+                    </a>
+                </li>
+                <li class="ac-farewell">
+                    <a href="{% url 'message:logout' %}" class="ac-gn-test">
+                        <span class="ac-gn-text">Logout</span>
                     </a>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <h1>want 2 bully me again?</h1>
-    <h2>login first.</h2>
-    <div class="loginform">
-       <form method="post" action="{% url 'message:loginsubmit' %}">
-            {% csrf_token %}
-            {{ form }}
-            <p>username</p>
-            <input type="text" name="username" autofocus required>
-            <br>
-            <br>
-            <p>password</p>
-            <input type="password" name="passwd" required>
-            <br>
-            <br>
-            <div class="btn">
-                <button> 登录 </button>
-            </div>
-        </form>
+    <div class="form-container">
+        <br />
+        <h1>want 2 bully me again?</h1>
+        <h2>login first.</h2>
+        <div class="formform">
+           <form id="formLogin" method="post" action="{% url 'message:login' %}">
+                {% csrf_token %}
+                <p>username</p>
+                <input type="text" name="username" autofocus required>
+                <br />
+                <br />
+                <p>password</p>
+                <input type="password" name="passwd" required>
+                <br />
+                <br />
+                <div class="btn">
+                    <button> login </button>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 </html>

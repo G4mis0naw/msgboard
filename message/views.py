@@ -1,46 +1,54 @@
 import json
-import random
-import time
-from django.shortcuts import render
+import uuid
+
+from django.core.cache import cache
+from django.shortcuts import render, redirect
+from django.urls import reverse
+
 from message.models import messageBoard, usernameInfo
-from django import forms
-from django.contrib.auth.hashers import make_password, check_password
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 
 
-def message_board(request):
+# 留言板页并获得当前用户名
+def home(request):
     message_list = messageBoard.objects.all().order_by('-timestamp')
-    return render(request, 'message/index.html', {'message_list': message_list})
+    currentUser = getUser(request)
+    return render(request, 'message/index.html', {'message_list': message_list, 'currentUser': currentUser})
 
 
-def signup_box(request):
-    return render(request, 'message/signup.html')
+# def index(request):
+#     return redirect(reverse('message:home'))
 
 
-def login_box(request):
-    return render(request, 'message/login.html')
+def checkLogin(request):
+    ticket = request.COOKIES.get('tickettoken', None)
+    if ticket:
+        user = usernameInfo.objects.filter(tickettoken=ticket).first()
+        if user:
+            return user
+    return None
 
 
-class MessageForm(forms.Form):
-    username = forms.CharField(max_length=20)
-    content = forms.CharField(max_length=140)
+def getUser(request):
+    user = checkLogin(request)
+    if user:
+        return user
 
 
-def message_submit(request):
-    f = MessageForm(request.POST)
+def message(request):
+    currentUser = getUser(request)
     if request.method == 'POST':
-        if f.is_valid():
-            username = f.cleaned_data['username']
-            content = f.cleaned_data['content']
-        else:
-            return message_board(request)
+        username = currentUser
+        content = request.POST.get('content')
+    else:
+        return home(request)
 
     if content != '':
         save_content = messageBoard()
         save_content.username = username
         save_content.content = content
         save_content.save()
-        return HttpResponseRedirect('/')
+        return redirect('/home/')
     else:
         return json.dumps({
             'status': 400001,
@@ -48,34 +56,20 @@ def message_submit(request):
         })
 
 
-class signupForm(forms.Form):
-    username = forms.CharField(max_length=20)
-    passwd = forms.CharField(max_length=140)
-
-
-class loginForm(forms.Form):
-    username = forms.CharField(max_length=20)
-    passwd = forms.CharField(max_length=140)
-
-
+# 用户注册
 def register(request):
-    n = signupForm(request.POST)
     if request.method == 'GET':
-        return render(request, 'message/signup.html', {'error': 'What do you want？'})  # 尝试返回弹窗
-    if request.method == 'POST':
-        if n.is_valid():
-            username = n.cleaned_data['username']
-            passwd = n.cleaned_data['passwd']
-            passwd = make_password(passwd)
-        else:
-            return signup_box(request)
+        return render(request, 'message/signup.html')
+    else:
+        username = request.POST.get('username')
+        password = request.POST.get('passwd')
 
     if username != '':
         save_table = usernameInfo()
         save_table.username = username
-        save_table.passwd = passwd
+        save_table.passwd = password
         save_table.save()
-        return HttpResponseRedirect('index')
+        return render(request, 'message/hello.html')
     else:
         return json.dumps({
             'status': 400001,
@@ -83,31 +77,34 @@ def register(request):
         })
 
 
+# 用户登录
 def login(request):
-    l = loginForm(request.POST)
     if request.method == 'GET':
-        return render(request, 'login/', {'error': 'What do u want？'})
-    elif request.method == 'POST':
-        if l.is_valid():
-            username = l.cleaned_data['username']
-            passwd = l.cleaned_data['passwd']
-            if usernameInfo.objects.filter(username=username).exists():
-                user = usernameInfo.objects.get(username=username)
-                if check_password(passwd, user.passwd):
-                    ticket = ''
-                    for i in range(12):
-                        s = 'abcdefghijklmnopqrstuvwxyz'
-                        ticket += random.choice(s)
-                    now_time = int(time.time())
-                    ticket = 'TK' + ticket + str(now_time)
-                    response = HttpResponseRedirect('index.html')
-                    response.set_cookie('ticket', ticket, max_age=10000)
-                    user.ticket = ticket
-                    user.save()
-                    return response
-                else:
-                    return render(request, 'index', {'password': 'Wrong password'})
-            else:
-                return render(request, 'login/', {'name': 'User doesn\'t exists，signup first'})
+        return render(request, 'message/login.html')
     else:
-        return login_box(request)
+        username = request.POST.get('username')
+        password = request.POST.get('passwd')
+        if usernameInfo.objects.filter(username=username).exists():
+            user = usernameInfo.objects.get(username=username)
+            if user.passwd == password:
+                token = str(uuid.uuid4())
+                response = HttpResponse()
+                response.set_cookie('tickettoken', token, expires=30)
+                response.set_cookie('uid', user.id, expires=60)
+                user.tickettoken = token
+                user.save()
+        return response
+
+
+# 登出
+def logout(request):
+    response = HttpResponse()
+    response.delete_cookie('tickettoken')
+    uid = request.COOKIES.get('uid')
+    uid = request.COOKIES.get('uid', None)
+    if uid:
+        content = cache.set('mine' + uid, None)
+
+    response.content = json.dump({'status': '1'})
+
+    return response

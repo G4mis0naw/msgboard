@@ -1,0 +1,25 @@
+.form-container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 48px;
+}
+
+h1{text-align: center;}
+h2{text-align: center;}
+p{text-align: center;}
+
+.form-container .formform{
+    text-align: center;
+}
+
+.farewell{
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 48px;
+}
