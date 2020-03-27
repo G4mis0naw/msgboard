@@ -6,18 +6,20 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from message.models import messageBoard, usernameInfo
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 
-# 留言板页并获得当前用户名
 def home(request):
-    message_list = messageBoard.objects.all().order_by('-timestamp')
     currentUser = getUser(request)
+    message_list = messageBoard.objects.all().order_by('-timestamp')
     return render(request, 'message/index.html', {'message_list': message_list, 'currentUser': currentUser})
 
 
 # def index(request):
 #     return redirect(reverse('message:home'))
+
+def welcome(request):
+    return render(request, 'message/welcome.html')
 
 
 def checkLogin(request):
@@ -29,14 +31,21 @@ def checkLogin(request):
     return None
 
 
+def getTicket(request):
+    ticket = request.COOKIE.get('tickettoken', None)
+    return ticket
+
+
 def getUser(request):
     user = checkLogin(request)
     if user:
         return user
 
 
+# 留言板块
 def message(request):
     currentUser = getUser(request)
+    resp = HttpResponse()
     if request.method == 'POST':
         username = currentUser
         content = request.POST.get('content')
@@ -44,16 +53,21 @@ def message(request):
         return home(request)
 
     if content != '':
-        save_content = messageBoard()
-        save_content.username = username
-        save_content.content = content
-        save_content.save()
-        return redirect('/home/')
+        respJson = {'status': '0', 'ret': 'Wrong.'}
+        if usernameInfo.objects.filter(username=username).exists():
+            mess = messageBoard()
+            mess.uUsername_id = username
+            mess.content = content
+            mess.save()
+            respJson = {'status': '1', 'ret': 'Success!'}
     else:
-        return json.dumps({
-            'status': 400001,
-            'message': "null message",
-        })
+        respJson = {'status': '0', 'ret': 'Message invalid!'}
+
+    resp.content = json.dumps(respJson)
+    return resp
+
+
+# def picUpload(request):
 
 
 # 用户注册
@@ -68,31 +82,50 @@ def register(request):
         save_table = usernameInfo()
         save_table.username = username
         save_table.passwd = password
-        save_table.save()
-        return render(request, 'message/hello.html')
-    else:
-        return json.dumps({
-            'status': 400001,
-            'message': "invalid signup",
-        })
+        try:
+            save_table.save()
+            respData = {
+                'status': 1,
+                'ret': 'Register success!',
+            }
+            return HttpResponse(json.dumps(respData), content_type="application/json")
+        except BaseException:
+            pass
+    respData = {
+        'status': 0,
+        'ret': 'Invalid information!',
+    }
+    return HttpResponse(json.dumps(respData), content_type="application/json")
 
 
 # 用户登录
 def login(request):
     if request.method == 'GET':
-        return render(request, 'message/login.html')
+        currentUser = getUser(request)
+        return render(request, 'message/login.html', {'currentUser': currentUser})
     else:
+        responseData = {'status': '0', 'ret': 'Hacker get away.'}
         username = request.POST.get('username')
         password = request.POST.get('passwd')
+        response = HttpResponse()
         if usernameInfo.objects.filter(username=username).exists():
             user = usernameInfo.objects.get(username=username)
             if user.passwd == password:
                 token = str(uuid.uuid4())
-                response = HttpResponse()
-                response.set_cookie('tickettoken', token, expires=30)
-                response.set_cookie('uid', user.id, expires=60)
+                response.set_cookie('tickettoken', token, expires=9000)
+                response.set_cookie('uid', user.id, expires=9000)
                 user.tickettoken = token
-                user.save()
+                try:
+                    user.save()
+                    responseData = {'status': '1', 'ret': 'Login success!'}
+                except BaseException as e:
+                    pass
+                    responseData = {'status': '0', 'ret': 'Login failed, check your information input.'}
+            else:
+                responseData = {'status': '0', 'ret': 'Username or password incorrect!'}
+        else:
+            responseData = {'status': '0', 'ret': 'User doesn\'t exist!'}
+        response.content = json.dumps(responseData)
         return response
 
 
@@ -104,7 +137,4 @@ def logout(request):
     uid = request.COOKIES.get('uid', None)
     if uid:
         content = cache.set('mine' + uid, None)
-
-    response.content = json.dump({'status': '1'})
-
     return response

@@ -13,4 +13,7 @@ class messageBoard(models.Model):
 class usernameInfo(models.Model):
     username = models.CharField(max_length=20, unique=True, verbose_name='username')
     passwd = models.CharField(max_length=20, verbose_name='password')
-    tickettoken = models.CharField(max_length=64, default='WTF', null=True, unique=True, verbose_name='status')
+    tickettoken = models.CharField(max_length=64, null=True, unique=True, verbose_name='status')
+
+    def __str__(self):
+        return self.username

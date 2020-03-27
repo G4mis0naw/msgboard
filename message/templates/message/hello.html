@@ -20,11 +20,10 @@
                     </a>
                 </li>
                 <li class="ac-signup">
-                    <a href="{% url 'message:signup' %}" class="ac-gn-test">
-                        <span class="ac-gn-text">Signup</span>
+                    <a href="{% url 'message:register' %}" class="ac-gn-test">
+                        <span class="ac-gn-text">Register</span>
                     </a>
                 </li>
-                <!--区分是否登录-->
                 <li class="ac-farewell">
                     <a href="{% url 'message:logout' %}" class="ac-gn-test">
                         <span class="ac-gn-text">Logout</span>
@@ -36,7 +35,8 @@
 
     <div class="hello">
         <br />
-        <h1>Login succeed.</h1>
+        <h1>Welcome!</h1>
+        <a href="{% url 'message:home' %}">click here to return home.</a>
     </div>
 </body>
 </html>

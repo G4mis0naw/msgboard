@@ -1,6 +1,5 @@
+from json import tool
 from django.conf.urls import url
-from django.urls import path, include
-
 from . import views
 
 app_name = "message"
@@ -13,4 +12,5 @@ urlpatterns = [
     url(r'register', views.register, name='register'),
     url(r'logout', views.logout, name='logout'),
     url(r'post', views.message, name='post'),
+    url(r'welcome', views.welcome, name='welcome'),
 ]

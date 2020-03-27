@@ -2,13 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link rel="stylesheet" type="text/css" href="../../static/message/css/navigation.css">
-    <link rel="stylesheet" type="text/css" href="../../static/message/css/LoginSignup.css">
-    <title>why u bully me?</title>
+    <title>Success</title>
 </head>
 <body>
-
     <nav id="menu">
         <div class="menu-content">
             <ul class="ac-gn-list">
@@ -27,40 +24,19 @@
                         <span class="ac-gn-text">Register</span>
                     </a>
                 </li>
-                {% if currentUser %}
                 <li class="ac-farewell">
                     <a href="{% url 'message:logout' %}" class="ac-gn-test">
                         <span class="ac-gn-text">Logout</span>
                     </a>
                 </li>
-                {% endif %}
             </ul>
         </div>
     </nav>
 
-    <div class="form-container">
+    <div class="hello">
         <br />
-        <h1>why u bully me?</h1>
-        <h2>signup first.</h2>
-        <div class="formform">
-           <form id="formLogin" method="post" action="{% url 'message:register' %}" enctype="multipart/form-data">
-                {% csrf_token %}
-                <p>username</p>
-                <input type="text" name="username" autofocus required>
-                <br />
-                <br />
-                <p>password</p>
-                <input type="password" name="passwd" required>
-                <br />
-                <br />
-                <div class="btn">
-                    <button> signup </button>
-                </div>
-            </form>
-        </div>
+        <h1>Welcome back!</h1>
+        <a href="{% url 'message:home' %}">click here to return home.</a>
     </div>
-
-    <script>
-    </script>
 </body>
 </html>
