@@ -9,6 +9,9 @@ class messageBoard(models.Model):
     class Meta:
         ordering = ['-timestamp']
 
+    def __str__(self):
+        return self.content
+
 
 class usernameInfo(models.Model):
     username = models.CharField(max_length=20, unique=True, verbose_name='username')
