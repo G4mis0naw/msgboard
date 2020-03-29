@@ -12,5 +12,5 @@ urlpatterns = [
     url(r'register', views.register, name='register'),
     url(r'logout', views.logout, name='logout'),
     url(r'post', views.message, name='post'),
-    url(r'welcome', views.welcome, name='welcome'),
+    url(r'delete/(?P<id>.*)/$', views.delete, name='delete'),
 ]

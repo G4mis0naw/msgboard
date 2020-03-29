@@ -49,19 +49,21 @@
         <h1>Hi.</h1>
         <h2>Signup first.</h2>
         <div class="formform">
-           <form id="formLogin" method="post" action="{% url 'message:register' %}" enctype="multipart/form-data">
+            <br />
+            <p> {{ resp }}</p>
+            <form id="formLogin" method="post" action="{% url 'message:register' %}" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="input-group mb-3" style="margin-top: 50px">
+                <div class="input-group mb-3" style="margin-top: 50px; margin-right: auto; margin-left: auto; width: 350px;">
                     <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1" style="margin-left: 500px">Username</span>
+                        <span class="input-group-text" id="basic-addon1">Username</span>
                     </div>
-                    <input type="text" class="form-control" name="username" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" required autofocus maxlength="24" style="margin-right: 500px">
+                    <input type="text" class="form-control" name="username" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" required autofocus maxlength="24">
                 </div>
-                <div class="input-group mb-3" style="margin-top: 10px">
+                <div class="input-group mb-3" style="margin-top: 10px; margin-right: auto; margin-left: auto; width: 350px;">
                     <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1" style="margin-left: 500px">Password</span>
+                        <span class="input-group-text" id="basic-addon1">Password</span>
                     </div>
-                    <input type="password" class="form-control" name="passwd" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" required maxlength="30" style="margin-right: 500px">
+                    <input type="password" class="form-control" name="passwd" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" required maxlength="30">
                 </div>
                 <br />
                 <div class="btn">
